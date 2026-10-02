@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:registroProductos.Models"
+             x:Class="registroProductos.Views.MainPage"
+             Title="Registro de Productos"
+             Background="#F6F7FB">
+
+    <ContentPage.Resources>
+        <Style x:Key="FieldStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#FFFFFF" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+            <Setter Property="HeightRequest" Value="44" />
+            <Setter Property="HorizontalOptions" Value="Fill" />
+        </Style>
+        <Style x:Key="EditorStyle" TargetType="Editor">
+            <Setter Property="BackgroundColor" Value="#FFFFFF" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+            <Setter Property="HeightRequest" Value="90" />
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="HeightRequest" Value="48" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#6A4CFA" Offset="0.0" />
+                        <GradientStop Color="#512BD4" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="12">
+
+            <!-- Cabecera -->
+            <Frame BackgroundColor="#FFFFFF" CornerRadius="12" HasShadow="True" Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Nuevo Producto" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#222" />
+                    <Label Text="Añade los datos del producto a continuación" FontSize="13" HorizontalOptions="Center" TextColor="#666" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Formulario -->
+            <Frame CornerRadius="12" HasShadow="True" BackgroundColor="#FFFFFF" Padding="14">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Nombre" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="txtNombre" Placeholder="Nombre del producto" Style="{StaticResource FieldStyle}" />
+
+                    <Label Text="Descripción" FontSize="14" TextColor="#333" />
+                    <Editor x:Name="txtDescripcion" Placeholder="Descripción" AutoSize="TextChanges" Style="{StaticResource EditorStyle}" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Precio" FontSize="14" TextColor="#333" />
+                            <Entry x:Name="txtPrecio" Placeholder="0.00" Keyboard="Numeric" Style="{StaticResource FieldStyle}" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Cantidad" FontSize="14" TextColor="#333" />
+                            <Entry x:Name="txtCantidad" Placeholder="0" Keyboard="Numeric" Style="{StaticResource FieldStyle}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Button Text="Guardar Producto" Style="{StaticResource PrimaryButton}" Clicked="OnGuardarProductoClicked" Margin="0,8,0,0" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Título de la lista -->
+            <Label Text="Productos guardados" FontSize="16" FontAttributes="Bold" TextColor="#333" Margin="4,8,0,0" />
+
+            <!-- Lista visual de productos guardados -->
+            <CollectionView x:Name="listaProductos">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Producto">
+                        <Frame BackgroundColor="#FFFFFF" CornerRadius="10" HasShadow="True" Padding="14" Margin="0,4">
+                            <VerticalStackLayout Spacing="4">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <Label Grid.Column="0" Text="{Binding Nombre}" FontAttributes="Bold" FontSize="16" TextColor="#222" />
+                                    <Label Grid.Column="1" Text="{Binding ID, StringFormat='ID: {0}'}" FontSize="12" TextColor="#6A4CFA" FontAttributes="Bold" VerticalOptions="Center" />
+                                </Grid>
+
+                                <Label Text="{Binding Descripcion}" TextColor="#555" FontSize="13" />
+
+                                <Grid ColumnDefinitions="*, *" Margin="0,4,0,0">
+                                    <Label Grid.Column="0" Text="{Binding Precio, StringFormat='Precio: ${0:F2}'}" FontAttributes="Bold" TextColor="#2E7D32" FontSize="14" />
+                                    <Label Grid.Column="1" Text="{Binding Cantidad, StringFormat='Stock: {0}'}" TextColor="#444" FontSize="14" HorizontalOptions="End" />
+                                </Grid>
+
+                                <Label Text="{Binding FechaRegistro, StringFormat='Registrado: {0:dd/MM/yyyy HH:mm}'}" FontSize="11" TextColor="#888" Margin="0,4,0,0" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <!-- Mensaje cuando la lista está vacía -->
+                <CollectionView.EmptyView>
+                    <Frame BackgroundColor="#FFFFFF" CornerRadius="10" HasShadow="False" Padding="12">
+                        <Label Text="Aquí aparecerán los productos guardados." TextColor="#666" HorizontalOptions="Center" />
+                    </Frame>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
